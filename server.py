@@ -4,11 +4,9 @@ import socket
 import serial
 import sys
 
-ser = serial.Serial()
+ser = serial.Serial('/dev/cu.usbmodem1411')
 ser.baudrate = 19200
-ser.port = 'COM1'
-ser.open()
-if not ser.open():
+if not ser.isOpen():
     sys.exit()
 
 #print('connected to arduino on: ', ser.port)
