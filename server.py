@@ -8,7 +8,7 @@ ser = serial.Serial()
 ser.baudrate = 19200
 ser.port = 'COM1'
 ser.open()
-if !ser.open():
+if not ser.open():
     sys.exit()
 
 #print('connected to arduino on: ', ser.port)
