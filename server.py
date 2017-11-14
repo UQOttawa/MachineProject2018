@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import socket
-import serial
+#import serial
 import sys
 
 #ser = serial.Serial()
