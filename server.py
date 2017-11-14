@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 
 import socket
-#import serial
+import serial
 import sys
 
-#ser = serial.Serial()
-#ser.baudrate = 19200
-#ser.port = 'COM1'
-#ser.open()
-#if !ser.open():
-#    sys.exit()
+ser = serial.Serial()
+ser.baudrate = 19200
+ser.port = 'COM1'
+ser.open()
+if !ser.open():
+    sys.exit()
 
 #print('connected to arduino on: ', ser.port)
 
@@ -28,6 +28,6 @@ while True:
     data = conn.recv(BUFFER_SIZE)
     if not data: break
     print ('forwarded: ', data)
-    #ser.write(data)
+    ser.write(data)
 
 conn.close()
