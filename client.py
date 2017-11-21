@@ -1,20 +1,27 @@
 #!/usr/bin/env python
 
 import socket
+import sys
+import msvcrt
+import threading
+import curses
 
 
-TCP_IP = '192.168.0.100'
+# TCP_IP = '192.168.0.100'
+TCP_IP = "localhost"
 TCP_PORT = 5005
 BUFFER_SIZE = 1024
-MESSAGE = "Hello, World!"
+MESSAGE = ""
+
+stdscr = curses.initscr()
+
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((TCP_IP, TCP_PORT))
-
+stdscr.keypad(1)
 while True:
-    MESSAGE = input("send stuff: ")
+    key = stdscr.getch()
+    MESSAGE = str(key)
     s.send(bytearray(MESSAGE, "utf-8"))
-    data = s.recv(BUFFER_SIZE)
-s.close()
 
-print ("received data:", data)
+s.close()
