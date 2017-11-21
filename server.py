@@ -4,13 +4,10 @@ import socket
 import serial
 import sys
 
-# ser = serial.Serial()
-# ser.baudrate = 19200
-# ser.port = 'COM1'
-# ser.open()
-
-# if not ser.open():
-#     sys.exit()
+ser = serial.Serial('/dev/cu.usbmodem1411')
+ser.baudrate = 19200
+if not ser.isOpen():
+    sys.exit()
 
 #print('connected to arduino on: ', ser.port)
 
@@ -33,4 +30,4 @@ while True:
     if(data == b'127'): # ctrl + backspace
         conn.close()
 
-        # ser.write(data)
+    ser.write(data)
