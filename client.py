@@ -2,13 +2,12 @@
 
 import socket
 import sys
-import msvcrt
 import threading
 import curses
 
 
-# TCP_IP = '192.168.0.100'
-TCP_IP = "localhost"
+TCP_IP = '192.168.0.100'
+# TCP_IP = "localhost"
 TCP_PORT = 5005
 BUFFER_SIZE = 1024
 MESSAGE = ""
