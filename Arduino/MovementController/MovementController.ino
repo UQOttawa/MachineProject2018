@@ -7,9 +7,11 @@
  * 50 = full speed forward
  * 
  */
+ #include <AFMotor.h>
+ #include <Servo.h>
 
 String readString;
-#include <Servo.h>
+AF_Stepper motor(48, 2);
 Servo rightSide;
 Servo leftSide;
 int nRightSideSpeed = 100;
@@ -21,6 +23,9 @@ void setup()
   rightSide.writeMicroseconds(1500);
   rightSide.attach(7);
   leftSide.attach(8);
+
+  motor.setSpeed(100);
+
   Serial.println("servo-test-22-dual-input");
 }
 
@@ -66,6 +71,16 @@ void loop()
       Serial.print("going left");
       nRightSideSpeed += 1;
       nLeftSideSpeed -= 1;
+    }
+    else if(readString == "m")
+    {
+      Serial.println("Rotate Storage");
+      motor.step(200/12, FORWARD, SINGLE);  
+    }
+    else if(readString == "l")
+    {
+      Serial.println("Rotate Arm");
+      motor.step(200/12, FORWARD, SINGLE); 
     }
 
   rightSide.write(nRightSideSpeed);
