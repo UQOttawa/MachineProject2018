@@ -23,7 +23,9 @@ void setup()
   rightSide.writeMicroseconds(1500);
   rightSide.attach(7);
   leftSide.attach(8);
+
   motor.setSpeed(100);
+
   Serial.println("servo-test-22-dual-input");
 }
 
