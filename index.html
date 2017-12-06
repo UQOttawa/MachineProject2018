@@ -1,0 +1,86 @@
+<html>
+
+<head>
+    <title>Machine Project</title>
+    <script src="jquery-3.2.1.min.js"></script>
+    <script>
+            var timer;
+            
+        $(function () {
+            // 10 minutes from now
+            let time = 600;
+            const $start = $("#start");
+            $start.on("click", () => {
+                if ($start.attr("running") == "false") {
+                    $start.text("STOP");
+                    $start.attr("running", true);
+                    timer = setInterval(function () {
+                        time--;
+                        $("#time-remaining").text(`${parseInt(time / 60)}: ${time % 60}`);
+                    }, 1000);
+                } else {
+                    $start.text("START");
+                    $start.attr("running", false);
+                    clearInterval(timer);
+                    time = 600;
+                    $("#time-remaining").text(`${parseInt(time / 60)}: ${time % 60}`);
+                    
+                }
+            });
+        });
+    </script>
+    <style>
+        body {
+            height: 100%;
+        }
+
+        #views {
+            height: 70vh;
+            background: rebeccapurple;
+            display: block;
+        }
+
+        #status>div {
+            height: 25vh;
+            display: inline-block;
+            margin: 0;
+            width: 24%;
+            vertical-align: middle;
+            text-align: center;
+            font: 10em bolder;
+
+        }
+
+        #time-remaining {
+            background: red;
+        }
+
+        #start {
+            display: block;
+            width: 100%;
+            height: 5vh;
+            cursor: pointer;
+            background: red;
+            text-align: center;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="views">
+        <div id="arm-view"></div>
+        <div id="rotational-view"></div>
+    </div>
+    <div id="status">
+        <div id="time-remaining">10:00</div>
+        <div id="course-image"></div>
+        <div id="state"></div>
+        <div id="storage-system"></div>
+    </div>
+    <div id="start" running=false>
+        START
+    </div>
+</body>
+
+</html>
