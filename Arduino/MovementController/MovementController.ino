@@ -2,7 +2,93 @@
 #include <Stepper.h>
 
 const bool ENABLE_LOGGING = true;
+//=======================================
+// Storage Variables
+//=======================================
+/*
+String storageState[7] = {
+  "FLAG_INCOMPLETE", "FLAG_INCOMPLETE", "FLAG_INCOMPLETE", "FLAG_INCOMPLETE", "FLAG_INCOMPLETE", "FLAG_INCOMPLETE", "FLAG_INCOMPLETE"
+};
 
+const int STORAGE_TOTAL_SLOTS = 9;
+const int STORAGE_ARM_ROTATION[STORAGE_TOTAL_SLOTS] = {
+
+};
+
+const int STORAGE_ARM_SHOULDER_POSITION[2][STORAGE_TOTAL_SLOTS] = {
+  {},
+  {},
+};
+const int STORAGE_ARM_ELBOW_POSITION[2][STORAGE_TOTAL_SLOTS] = {
+  {},
+  {},
+};
+const int STORAGE_ARM_WRIST_POSITION[2][STORAGE_TOTAL_SLOTS] = {
+  {},
+  {},
+};
+
+const int ARM_STORAGE_ACCESS_DELAY = 200;
+
+void storageTakeFlag(int position) {
+  armSetShoulder(ARM_SHOULDER_INIT);
+  armSetElbow(ARM_ELBOW_INIT);
+
+  delay(ARM_STORAGE_ACCESS_DELAY);
+  armSetShoulder(ARM_FLAG_SHOULDER_POSITION[0][position]);
+  armSetElbow(ARM_FLAG_ELBOW_POSITION[0][position]);
+  armSetWrist(ARM_FLAG_WRIST_POSITION[0][position]);
+  armSetClaw(ARM_CLAW_OPEN);
+  armPivot(STORAGE_ARM_ROTATION[position]);
+
+  delay(ARM_STORAGE_ACCESS_DELAY);
+  armSetClaw(ARM_CLAW_CLOSE);
+  delay(ARM_STORAGE_ACCESS_DELAY);
+
+  armSetShoulder(ARM_FLAG_SHOULDER_POSITION[1][position]);
+  armSetElbow(ARM_FLAG_ELBOW_POSITION[1][position]);
+  armSetWrist(ARM_FLAG_WRIST_POSITION[1][position]);
+
+  delay(ARM_STORAGE_ACCESS_DELAY);
+  armSetShoulder(ARM_SHOULDER_INIT);
+  armSetElbow(ARM_ELBOW_INIT);
+  armSetWrist(ARM_WRIST_INIT);
+  armPivot(0);
+}
+
+void storageReturnFlag(int position) {
+  armSetShoulder(ARM_SHOULDER_INIT);
+  armSetElbow(ARM_ELBOW_INIT);
+
+  delay(ARM_STORAGE_ACCESS_DELAY);
+  armSetShoulder(ARM_FLAG_SHOULDER_POSITION[1][position]);
+  armSetElbow(ARM_FLAG_ELBOW_POSITION[1][position]);
+  armSetWrist(ARM_FLAG_WRIST_POSITION[1][position]);
+  armPivot(STORAGE_ARM_ROTATION[position]);
+
+  delay(ARM_STORAGE_ACCESS_DELAY);
+  armSetShoulder(ARM_FLAG_SHOULDER_POSITION[0][position]);
+  armSetElbow(ARM_FLAG_ELBOW_POSITION[0][position]);
+  armSetWrist(ARM_FLAG_WRIST_POSITION[0][position]);
+  delay(ARM_STORAGE_ACCESS_DELAY);
+
+  armSetClaw(ARM_CLAW_OPEN);
+  delay(ARM_STORAGE_ACCESS_DELAY);
+
+  armSetShoulder(ARM_SHOULDER_INIT);
+  armSetElbow(ARM_ELBOW_INIT);
+  armSetWrist(ARM_WRIST_INIT);
+}
+
+int storageFirstSlot(String targetState) {
+  for (int i = 0; i < STORAGE_TOTAL_SLOTS; i++) {
+    if (storageState[i] == targetState) {
+      return i;
+    }
+  }
+  return 0;
+}
+*/
 //=======================================
 // Arm Variables
 //=======================================
@@ -35,10 +121,10 @@ void setupArm() {
   armWrist.attach(18);
   armClaw.attach(19);
 
-  armShoulder.write(ARM_SHOULDER_INIT);
-  armElbow.write(ARM_ELBOW_INIT);
-  armWrist.write(ARM_WRIST_INIT);
-  armClaw.write(ARM_CLAW_OPEN);
+  armSetShoulder(ARM_SHOULDER_INIT);
+  armSetElbow(ARM_ELBOW_INIT);
+  armSetWrist(ARM_WRIST_INIT);
+  armSetClaw(ARM_CLAW_OPEN);
 }
 
 void armSetPivot(int degrees) {
@@ -169,10 +255,10 @@ void loop()
     armSetPivot(armRotation - 1);
   } else if (command == "110") { // 'n'
     commandPerformed = "call: armShoulderUp";
-    armSetElbow(armShoulder.read() + ARM_SERVO_STEP);
+    armSetShoulder(armShoulder.read() + ARM_SERVO_STEP);
   } else if (command == "109") { // 'm'
     commandPerformed = "call: armShoulderDown";
-    armSetElbow(armShoulder.read() - ARM_SERVO_STEP);
+    armSetShoulder(armShoulder.read() - ARM_SERVO_STEP);
   } else if (command == "103") { // 'g'
     commandPerformed = "call: armElbowUp";
     armSetElbow(armElbow.read() + ARM_SERVO_STEP);
@@ -185,7 +271,7 @@ void loop()
   } else if (command == "117") { // 'u'
     commandPerformed = "call: armWristCounterClockwise";
     armSetWrist(armWrist.read() - ARM_SERVO_STEP);
-  } else if (command == "50") { // '2'
+  } else if (command == "116") { // 't'
     commandPerformed = "call: armFlipWrist";
     armSetWrist(armWrist.read() - ARM_SERVO_STEP);
   } else if (command == "98") { // 'b'
@@ -207,6 +293,29 @@ void loop()
     armWrist.write(ARM_WRIST_INIT);
     armClaw.write(ARM_CLAW_OPEN);
   }
+  //=======================================
+  // Storage Commands
+  //=======================================
+  /*
+  else if (command == "49") { // '1'
+    commandPerformed = "call: storageTakeIncompleteFlag";
+    int storageSlot = storageFirstSlot("FLAG_INCOMPLETE");
+    storageTakeFlag(storageSlot);
+    storageState[storageSlot] = "EMPTY";
+  }
+  else if (command == "50") { // '2'
+    commandPerformed = "call: storageReturnCompleteFlag";
+    int storageSlot = storageFirstSlot("EMPTY");
+    storageReturnFlag(storageSlot);
+    storageState[storageSlot] = "FLAG_COMPLETE";
+  }
+  else if (command == "51") { // '3'
+    commandPerformed = "call: storageTakeCompleteFlag";
+    int storageSlot = storageFirstSlot("FLAG_COMPLETE");
+    storageTakeFlag(storageSlot);
+    storageState[storageSlot] = "EMPTY";
+  }
+  */
   //=======================================
   // Drive Commands
   //=======================================
