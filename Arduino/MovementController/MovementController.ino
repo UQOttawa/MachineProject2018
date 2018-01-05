@@ -161,9 +161,9 @@ void armFlipWrist() {
 Servo trackRight;
 Servo trackLeft;
 
-const int TRACK_FORWARD = 80; // 50 lower bound
+const int TRACK_FORWARD = 120; // 150 upper bound
 const int TRACK_STOP = 90;
-const int TRACK_REVERSE = 120; // 150 upper bound
+const int TRACK_REVERSE = 80; // 50 lower bound
 
 void setupTracks() {
   trackRight.attach(15);
