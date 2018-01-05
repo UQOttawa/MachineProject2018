@@ -166,8 +166,8 @@ const int TRACK_STOP = 90;
 const int TRACK_REVERSE = 80; // 50 lower bound
 
 void setupTracks() {
-  trackRight.attach(15);
-  trackLeft.attach(14);
+  trackRight.attach(14);
+  trackLeft.attach(15);
 
   trackRight.write(TRACK_STOP);
   trackLeft.write(TRACK_STOP);
