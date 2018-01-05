@@ -241,18 +241,18 @@ void loop()
   //=======================================
   if (command == "105") { // 'i'
     commandPerformed = "call: armUp";
-    armSetShoulder(armShoulder.read() + ARM_SERVO_STEP);
-    armSetElbow(armElbow.read() - ARM_SERVO_STEP);
-  } else if (command == "107") { // 'k'
-    commandPerformed = "call: armDown";
     armSetShoulder(armShoulder.read() - ARM_SERVO_STEP);
     armSetElbow(armElbow.read() + ARM_SERVO_STEP);
+  } else if (command == "107") { // 'k'
+    commandPerformed = "call: armDown";
+    armSetShoulder(armShoulder.read() + ARM_SERVO_STEP);
+    armSetElbow(armElbow.read() - ARM_SERVO_STEP);
   } else if (command == "91") { // '['
-    commandPerformed = "call: armPivotClockwise";
-    armSetPivot(armRotation + 1);
-  } else if (command == "93") { // ']'
     commandPerformed = "call: armPivotCounterClockwise";
     armSetPivot(armRotation - 1);
+  } else if (command == "93") { // ']'
+    commandPerformed = "call: armPivotClockwise";
+    armSetPivot(armRotation + 1);
   } else if (command == "110") { // 'n'
     commandPerformed = "call: armShoulderUp";
     armSetShoulder(armShoulder.read() + ARM_SERVO_STEP);

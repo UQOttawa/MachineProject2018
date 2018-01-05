@@ -12,7 +12,7 @@ Here is a short list of all the availible commands:
 | c       | printArmState             | Prints the current state of the arm                                  |
 | r       | armReset                  | moves the arm to its initial state                                   |
 | i, k    | armUpDown                 | moved the arm up and down without affecting the wrist                |
-| [, ]    | armPivot                  | pivots the arm clockwise and counterclockwise                        |
+| [, ]    | armPivot                  | pivots the arm counterclockwise and clockwise                        |
 | n, m    | armShoulder               | rotates the arm shoulder up and down                                 |
 | g, h    | armElbow                  | rotates the arm elbow up and down                                    |
 | y, u    | armWrist                  | rotates the arm wrist clockwise and counterclockwise                 |
