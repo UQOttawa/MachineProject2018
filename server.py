@@ -25,7 +25,7 @@ conn, addr = s.accept()
 print('connected to client on: ', addr)
 while True:
     data = conn.recv(BUFFER_SIZE)
-    for command in data.split('|'):
+    for command in data.split('|')[:-1]:
         if(command == b'23'): # ctrl + backspace
             conn.close()
         elif(int(command) < 257):
