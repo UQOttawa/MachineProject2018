@@ -2,9 +2,8 @@
 
 import socket
 import sys
-import threading
 import curses
-
+from time import sleep
 
 TCP_IP = '192.168.0.100'
 # TCP_IP = "localhost"
@@ -22,5 +21,6 @@ while True:
     key = stdscr.getch()
     MESSAGE = str(key)
     s.send(bytearray(MESSAGE, "utf-8"))
+    sleep(0.1)
 
 s.close()
