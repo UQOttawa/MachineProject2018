@@ -1,7 +1,7 @@
 #include <Servo.h>
 #include <Stepper.h>
 
-const bool ENABLE_LOGGING = true;
+const bool ENABLE_LOGGING = false;
 //=======================================
 // Storage Variables
 //=======================================

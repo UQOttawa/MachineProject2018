@@ -29,9 +29,7 @@ while True:
 #       print("moving forward")
     if(data == b'23'): # ctrl + backspace
         conn.close()
-    if(int(data) < 257):
 ##        print(int(data))
-        ser.write(chr(int(data)))
-    else:
-        print('You Fucked UP:', int(data))
+
+    ser.write(chr(int(data)))
 #    print(ser.readline())

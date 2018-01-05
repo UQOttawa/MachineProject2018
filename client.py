@@ -21,6 +21,5 @@ while True:
     key = stdscr.getch()
     MESSAGE = str(key)
     s.send(bytearray(MESSAGE, "utf-8"))
-    sleep(0.1)
 
 s.close()
