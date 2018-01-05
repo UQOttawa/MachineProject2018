@@ -19,7 +19,7 @@ s.connect((TCP_IP, TCP_PORT))
 stdscr.keypad(1)
 while True:
     key = stdscr.getch()
-    MESSAGE = str(key)
+    MESSAGE = str(key) + '|'
     s.send(bytearray(MESSAGE, "utf-8"))
 
 s.close()

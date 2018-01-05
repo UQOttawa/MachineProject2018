@@ -25,11 +25,10 @@ conn, addr = s.accept()
 print('connected to client on: ', addr)
 while True:
     data = conn.recv(BUFFER_SIZE)
-#    if(data==b'119'): # w
-#       print("moving forward")
-    if(data == b'23'): # ctrl + backspace
-        conn.close()
-##        print(int(data))
-
-    ser.write(chr(int(data)))
-#    print(ser.readline())
+    for command in data.split('|'):
+        if(command == b'23'): # ctrl + backspace
+            conn.close()
+        elif(int(command) < 257):
+            ser.write(chr(int(command)))
+        else:
+            print('You fucked up ', command)
