@@ -28,7 +28,7 @@ while True:
     for command in data.split('|')[:-1]:
         if(command == b'23'): # ctrl + backspace
             conn.close()
-        elif(int(command) < 257):
+        elif(int(command) < 256):
             ser.write(chr(int(command)))
         else:
             print('You fucked up ', command)
