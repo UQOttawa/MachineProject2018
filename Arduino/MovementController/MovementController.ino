@@ -2,9 +2,6 @@
 #include <Stepper.h>
 
 const bool ENABLE_LOGGING = false;
-//=======================================
-// Servo Variables
-//=======================================
 
 //=======================================
 // Arm Variables
@@ -105,15 +102,15 @@ void storageTakeFlag(int position) {
   armSetElbow(ARM_ELBOW_INIT);
   armSetPivot(STORAGE_ARM_ROTATION[position]);
   armSetClaw(ARM_CLAW_OPEN);
-  
+
   armSetElbow(STORAGE_ARM_ELBOW_POSITION[0][position]);
   armSetShoulder(STORAGE_ARM_SHOULDER_POSITION[0][position]);
   armSetWrist(STORAGE_ARM_WRIST_POSITION[0][position]);
-  
+
   armSetShoulder(STORAGE_ARM_SHOULDER_POSITION[1][position]);
   armSetElbow(STORAGE_ARM_ELBOW_POSITION[1][position]);
   armSetWrist(STORAGE_ARM_WRIST_POSITION[1][position]);
-  
+
   armSetClaw(ARM_CLAW_CLOSE);
   armSetShoulder(ARM_SHOULDER_INIT);
   armSetElbow(ARM_ELBOW_INIT);
@@ -130,15 +127,15 @@ void storageReturnFlag(int position) {
   armSetShoulder(STORAGE_ARM_SHOULDER_POSITION[0][position]);
   armSetElbow(STORAGE_ARM_ELBOW_POSITION[0][position]);
   armSetWrist(STORAGE_ARM_WRIST_POSITION[0][position]);
-  
+
   armSetPivot(STORAGE_ARM_ROTATION[position]);
   armSetShoulder(STORAGE_ARM_SHOULDER_POSITION[1][position]);
   armSetElbow(STORAGE_ARM_ELBOW_POSITION[1][position]);
-  
+
   armSetWrist(STORAGE_ARM_WRIST_POSITION[1][position]);
-  
+
   armSetClaw(ARM_CLAW_OPEN);
-  
+
   armSetShoulder(ARM_SHOULDER_INIT);
   armSetElbow(ARM_ELBOW_INIT);
   armSetWrist(ARM_WRIST_INIT);
@@ -379,7 +376,7 @@ int limitRange(int value, int lowerLimit, int upperLimit) {
   return limitedValue;
 }
 
-const int SERVO_MOVE_DELAY = 10;
+const int SERVO_MOVE_DELAY = 7;
 void writeServo(Servo servo, int position) {
   int offset = position - servo.read();
   if (position - servo.read() < 0) {
@@ -391,8 +388,6 @@ void writeServo(Servo servo, int position) {
     while(servo.read() != position) {
       servo.write(servo.read() + 1);
       delay(SERVO_MOVE_DELAY);
-    }   
+    }
   }
 }
-
-
