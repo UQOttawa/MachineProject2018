@@ -1,7 +1,10 @@
 #include <Servo.h>
 #include <Stepper.h>
 
-const bool ENABLE_LOGGING = true;
+const bool ENABLE_LOGGING = false;
+//=======================================
+// Servo Variables
+//=======================================
 
 //=======================================
 // Arm Variables
@@ -28,6 +31,7 @@ const int ARM_CLAW_CLOSE = 151;
 
 void setupArm() {
   armPivot.setSpeed(10);
+  armSetPivot(-1);
   armSetPivot(0);
 
   armShoulder.attach(16);
@@ -42,114 +46,99 @@ void setupArm() {
 }
 
 void armSetPivot(int degrees) {
-  armPivot.step(limitRange(degrees, 0, 360) - armRotation);
+  armPivot.step(-1*(limitRange(degrees, 0, 360) - armRotation));
   armRotation = limitRange(degrees, 0, 360);
 }
 
 void armSetShoulder(int degrees) {
-  armShoulder.write(limitRange(degrees, ARM_SHOULDER_MIN, ARM_SHOULDER_MAX));
+  writeServo(armShoulder, limitRange(degrees, ARM_SHOULDER_MIN, ARM_SHOULDER_MAX));
 }
 
 void armSetElbow(int degrees) {
-  armElbow.write(limitRange(degrees, ARM_ELBOW_MIN, ARM_ELBOW_MAX));
+  writeServo(armElbow, limitRange(degrees, ARM_ELBOW_MIN, ARM_ELBOW_MAX));
 }
 
 void armSetWrist(int degrees) {
-  armWrist.write(limitRange(degrees, ARM_WRIST_MIN, ARM_WRIST_MAX));
+  writeServo(armWrist, limitRange(degrees, ARM_WRIST_MIN, ARM_WRIST_MAX));
 }
 
 void armSetClaw(int degrees) {
-  armClaw.write(limitRange(degrees, ARM_CLAW_OPEN, ARM_CLAW_CLOSE));
+  writeServo(armClaw, limitRange(degrees, ARM_CLAW_OPEN, ARM_CLAW_CLOSE));
 }
 
 void armFlipWrist() {
   if (armWrist.read() < (ARM_WRIST_MAX - ARM_WRIST_MIN) / 2){
-    armWrist.write(ARM_WRIST_MAX);
+    writeServo(armWrist, ARM_WRIST_MAX);
   } else {
-    armWrist.write(ARM_WRIST_MIN);
+    writeServo(armWrist, ARM_WRIST_MIN);
   }
 }
 //=======================================
 // Storage Variables
 //=======================================
-const int STORAGE_TOTAL_SLOTS = 1;
+const int STORAGE_TOTAL_SLOTS = 8;
 String storageState[STORAGE_TOTAL_SLOTS] = {
-  //"FLAG_INCOMPLETE", "FLAG_INCOMPLETE", "FLAG_INCOMPLETE", "FLAG_INCOMPLETE", "FLAG_INCOMPLETE", "FLAG_INCOMPLETE", "FLAG_INCOMPLETE"
- "FLAG_INCOMPLETE"
+  "FLAG_INCOMPLETE", "FLAG_INCOMPLETE", "FLAG_INCOMPLETE", "FLAG_INCOMPLETE", "FLAG_INCOMPLETE", "FLAG_INCOMPLETE"
 };
 
 const int STORAGE_ARM_ROTATION[STORAGE_TOTAL_SLOTS] = {
-  3,
+  0, 12, 20, 29, 45, 53, 62, 70
 };
 
 const int STORAGE_ARM_SHOULDER_POSITION[2][STORAGE_TOTAL_SLOTS] = {
-  {55},
-  {70},
+  {55, 55, 55, 55, 55, 55, 55, 55},
+  {70, 70, 70, 70, 70, 70, 70, 70},
 };
 const int STORAGE_ARM_ELBOW_POSITION[2][STORAGE_TOTAL_SLOTS] = {
-  {120},
-  {105},
+  {120, 120, 120, 120, 120, 120, 120, 120},
+  {105, 105, 105, 105, 105, 105, 105, 105},
 };
 const int STORAGE_ARM_WRIST_POSITION[2][STORAGE_TOTAL_SLOTS] = {
-  {0},
-  {0},
+  {0, 0, 0, 0, 0, 0, 0, 0},
+  {0, 0, 0, 0, 0, 0, 0, 0},
 };
 
-const int ARM_STORAGE_ACCESS_DELAY = 1050;
+const int ARM_STORAGE_ACCESS_DELAY = 500;
 
 void storageTakeFlag(int position) {
   armSetShoulder(ARM_SHOULDER_INIT);
   armSetElbow(ARM_ELBOW_INIT);
-  delay(ARM_STORAGE_ACCESS_DELAY);
   armSetPivot(STORAGE_ARM_ROTATION[position]);
   armSetClaw(ARM_CLAW_OPEN);
-  delay(ARM_STORAGE_ACCESS_DELAY);
+  
   armSetElbow(STORAGE_ARM_ELBOW_POSITION[0][position]);
   armSetShoulder(STORAGE_ARM_SHOULDER_POSITION[0][position]);
-  delay(ARM_STORAGE_ACCESS_DELAY);
   armSetWrist(STORAGE_ARM_WRIST_POSITION[0][position]);
-  delay(ARM_STORAGE_ACCESS_DELAY);
   
-  delay(ARM_STORAGE_ACCESS_DELAY);
   armSetShoulder(STORAGE_ARM_SHOULDER_POSITION[1][position]);
   armSetElbow(STORAGE_ARM_ELBOW_POSITION[1][position]);
-  delay(ARM_STORAGE_ACCESS_DELAY);
   armSetWrist(STORAGE_ARM_WRIST_POSITION[1][position]);
-  delay(ARM_STORAGE_ACCESS_DELAY);
+  
   armSetClaw(ARM_CLAW_CLOSE);
-  delay(ARM_STORAGE_ACCESS_DELAY);
   armSetShoulder(ARM_SHOULDER_INIT);
-  delay(ARM_STORAGE_ACCESS_DELAY);
   armSetElbow(ARM_ELBOW_INIT);
-  delay(ARM_STORAGE_ACCESS_DELAY);
   armSetWrist(ARM_WRIST_INIT);
-  delay(ARM_STORAGE_ACCESS_DELAY);
+
   armSetPivot(0);
 }
 
 void storageReturnFlag(int position) {
   armSetShoulder(ARM_SHOULDER_INIT);
   armSetElbow(ARM_ELBOW_INIT);
-  delay(ARM_STORAGE_ACCESS_DELAY);
   armSetPivot(STORAGE_ARM_ROTATION[position]);
 
-  delay(ARM_STORAGE_ACCESS_DELAY);
   armSetShoulder(STORAGE_ARM_SHOULDER_POSITION[0][position]);
   armSetElbow(STORAGE_ARM_ELBOW_POSITION[0][position]);
   armSetWrist(STORAGE_ARM_WRIST_POSITION[0][position]);
-  delay(ARM_STORAGE_ACCESS_DELAY);
+  
   armSetPivot(STORAGE_ARM_ROTATION[position]);
-
-  delay(ARM_STORAGE_ACCESS_DELAY);
   armSetShoulder(STORAGE_ARM_SHOULDER_POSITION[1][position]);
   armSetElbow(STORAGE_ARM_ELBOW_POSITION[1][position]);
-  delay(ARM_STORAGE_ACCESS_DELAY);
+  
   armSetWrist(STORAGE_ARM_WRIST_POSITION[1][position]);
-  delay(ARM_STORAGE_ACCESS_DELAY);
-
+  
   armSetClaw(ARM_CLAW_OPEN);
-  delay(ARM_STORAGE_ACCESS_DELAY);
-
+  
   armSetShoulder(ARM_SHOULDER_INIT);
   armSetElbow(ARM_ELBOW_INIT);
   armSetWrist(ARM_WRIST_INIT);
@@ -387,6 +376,23 @@ int limitRange(int value, int lowerLimit, int upperLimit) {
 
   limitedValue = (value > lowerLimit) ? value : lowerLimit;
   limitedValue = (value < upperLimit) ? value : upperLimit;
-
   return limitedValue;
 }
+
+const int SERVO_MOVE_DELAY = 10;
+void writeServo(Servo servo, int position) {
+  int offset = position - servo.read();
+  if (position - servo.read() < 0) {
+    while(servo.read() != position) {
+      servo.write(servo.read() - 1);
+      delay(SERVO_MOVE_DELAY);
+    }
+  } else {
+    while(servo.read() != position) {
+      servo.write(servo.read() + 1);
+      delay(SERVO_MOVE_DELAY);
+    }   
+  }
+}
+
+
