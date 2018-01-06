@@ -79,23 +79,21 @@ String storageState[STORAGE_TOTAL_SLOTS] = {
 };
 
 const int STORAGE_ARM_ROTATION[STORAGE_TOTAL_SLOTS] = {
-  0, 12, 20, 29, 45, 53, 62, 70
+  0, 9, 181, 29, 45, 53, 62, 70
 };
 
 const int STORAGE_ARM_SHOULDER_POSITION[2][STORAGE_TOTAL_SLOTS] = {
-  {55, 55, 55, 55, 55, 55, 55, 55},
-  {70, 70, 70, 70, 70, 70, 70, 70},
+  {35, 35, 35, 35, 35, 35, 35, 35},
+  {75, 75, 75, 75, 75, 75, 75, 75},
 };
 const int STORAGE_ARM_ELBOW_POSITION[2][STORAGE_TOTAL_SLOTS] = {
-  {120, 120, 120, 120, 120, 120, 120, 120},
-  {105, 105, 105, 105, 105, 105, 105, 105},
+  {140, 140, 140, 140, 140, 140, 140, 140},
+  {100, 100, 100, 100, 100, 100, 100, 100},
 };
 const int STORAGE_ARM_WRIST_POSITION[2][STORAGE_TOTAL_SLOTS] = {
   {0, 0, 0, 0, 0, 0, 0, 0},
   {0, 0, 0, 0, 0, 0, 0, 0},
 };
-
-const int ARM_STORAGE_ACCESS_DELAY = 500;
 
 void storageTakeFlag(int position) {
   armSetShoulder(ARM_SHOULDER_INIT);
@@ -106,9 +104,9 @@ void storageTakeFlag(int position) {
   armSetElbow(STORAGE_ARM_ELBOW_POSITION[0][position]);
   armSetShoulder(STORAGE_ARM_SHOULDER_POSITION[0][position]);
   armSetWrist(STORAGE_ARM_WRIST_POSITION[0][position]);
-
-  armSetShoulder(STORAGE_ARM_SHOULDER_POSITION[1][position]);
+  
   armSetElbow(STORAGE_ARM_ELBOW_POSITION[1][position]);
+  armSetShoulder(STORAGE_ARM_SHOULDER_POSITION[1][position]);
   armSetWrist(STORAGE_ARM_WRIST_POSITION[1][position]);
 
   armSetClaw(ARM_CLAW_CLOSE);
@@ -123,15 +121,13 @@ void storageReturnFlag(int position) {
   armSetShoulder(ARM_SHOULDER_INIT);
   armSetElbow(ARM_ELBOW_INIT);
   armSetPivot(STORAGE_ARM_ROTATION[position]);
-
-  armSetShoulder(STORAGE_ARM_SHOULDER_POSITION[0][position]);
+  
   armSetElbow(STORAGE_ARM_ELBOW_POSITION[0][position]);
+  armSetShoulder(STORAGE_ARM_SHOULDER_POSITION[0][position]);
   armSetWrist(STORAGE_ARM_WRIST_POSITION[0][position]);
 
-  armSetPivot(STORAGE_ARM_ROTATION[position]);
-  armSetShoulder(STORAGE_ARM_SHOULDER_POSITION[1][position]);
   armSetElbow(STORAGE_ARM_ELBOW_POSITION[1][position]);
-
+  armSetShoulder(STORAGE_ARM_SHOULDER_POSITION[1][position]);
   armSetWrist(STORAGE_ARM_WRIST_POSITION[1][position]);
 
   armSetClaw(ARM_CLAW_OPEN);
@@ -376,7 +372,7 @@ int limitRange(int value, int lowerLimit, int upperLimit) {
   return limitedValue;
 }
 
-const int SERVO_MOVE_DELAY = 7;
+const int SERVO_MOVE_DELAY = 15;
 void writeServo(Servo servo, int position) {
   int offset = position - servo.read();
   if (position - servo.read() < 0) {
