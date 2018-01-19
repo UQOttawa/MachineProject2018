@@ -33,4 +33,4 @@ while True:
         elif(int(command) < 256):
             ser.write(chr(int(command)))
         else:
-            print('You fucked up ', command)
+            print('Error: ', command)
